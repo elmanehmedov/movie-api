@@ -4,9 +4,33 @@ const Movie=require('../model/Movie');
 
 
 /* GET users listing. */
+// router.get('/', function(req, res, next) {
+//   // res.json({data:'movies'});
+//   const promise=Movie.find({});
+//   promise.then((data)=>{
+//     console.log(data)
+//     res.json(data)
+//   }).catch((err)=>{
+//     res.json(err)
+//   })
+// });
+
 router.get('/', function(req, res, next) {
   // res.json({data:'movies'});
-  const promise=Movie.find({});
+  const promise=Movie.aggregate([
+    {
+      $lookup:{
+        from:'directors',
+        localField:'director_id',
+        foreignField:'_id',
+        as:'director'
+      }
+    },
+    {
+      $unwind:'$director'
+    }
+
+  ]);
   promise.then((data)=>{
     console.log(data)
     res.json(data)
@@ -14,6 +38,8 @@ router.get('/', function(req, res, next) {
     res.json(err)
   })
 });
+
+
 router.get("/top",(req,res,next)=>{
   const promise=Movie.find({}).limit(3).sort({imdb_score:-1});
   promise.then((data)=>{

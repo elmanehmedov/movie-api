@@ -7,7 +7,9 @@ const MovieSchema=new Schema({
     },
     title:{
         type:String,
-        required:true
+        required:[true, '`{PATH}` xanasini daxil etmek teleb olunur'],
+        maxlength:[15, '`{PATH}` xanasi ({MAXLENGTH}) SIMVOLDAN AZ DAXIL ETMEK TELEB OLUNUR'],
+        minlength:[3, '`{PATH}` xanasini ({MINLENGTH}) SIMVOLDAN AZ DAXIL ETMEK TELEB OLUNUR'],
     },
     category:String,
     country:String,
